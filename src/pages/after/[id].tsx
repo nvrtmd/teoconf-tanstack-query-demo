@@ -1,6 +1,4 @@
-"use client";
-
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -143,8 +141,13 @@ function UpdateUserPage({ userId }: { userId: number }) {
 }
 
 export default function UpdateUser() {
-  const params = useParams();
-  const id = params.id as string;
+  const router = useRouter();
+  const { id } = router.query;
+
+  if (!id || typeof id !== "string") {
+    return <div>Loading...</div>;
+  }
+
   const userId = parseInt(id);
 
   return (
