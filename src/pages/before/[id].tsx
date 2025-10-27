@@ -1,0 +1,158 @@
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+} from "@mui/material";
+import { Suspense } from "@suspensive/react";
+import { useSuspenseGetUser, useUpdateUserBefore } from "@/queries/user";
+
+import type { SubmitHandler } from "react-hook-form";
+import { userFormSchema } from "@/server/fixtures";
+
+type UserFormValues = z.infer<typeof userFormSchema>;
+
+interface UserFormProps {
+  defaultValues?: UserFormValues;
+  onSubmit: SubmitHandler<UserFormValues>;
+  isPending: boolean;
+}
+
+function UserForm({ defaultValues, onSubmit, isPending }: UserFormProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<UserFormValues>({
+    values: defaultValues,
+    defaultValues,
+    resolver: zodResolver(userFormSchema),
+  });
+  return (
+    <Box sx={{ maxWidth: 500, mx: "auto", p: 2 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h5" gutterBottom>
+          유저 정보 수정 (Before)
+        </Typography>
+
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
+          <TextField
+            {...register("name")}
+            fullWidth
+            label="이름"
+            error={!!errors.name}
+            helperText={errors.name?.message}
+            sx={{ mb: 2 }}
+          />
+
+          <FormControl fullWidth error={!!errors.role} sx={{ mb: 3 }}>
+            <InputLabel>역할</InputLabel>
+            <Select
+              value={watch("role") || ""}
+              onChange={(e) =>
+                setValue(
+                  "role",
+                  e.target.value as "admin" | "editor" | "viewer",
+                  { shouldDirty: true, shouldValidate: true }
+                )
+              }
+              label="역할"
+            >
+              <MenuItem value="admin">관리자</MenuItem>
+              <MenuItem value="editor">편집자</MenuItem>
+              <MenuItem value="viewer">뷰어</MenuItem>
+            </Select>
+            {errors.role && (
+              <Typography variant="caption" color="error" sx={{ mt: 1, ml: 2 }}>
+                {errors.role.message}
+              </Typography>
+            )}
+          </FormControl>
+
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isPending}
+              sx={{ flex: 1 }}
+            >
+              {isPending ? "수정 중..." : "수정"}
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
+  );
+}
+
+function UpdateUserPage({ userId }: { userId: number }) {
+  const router = useRouter();
+  const [user] = useSuspenseGetUser({ id: userId });
+  const { mutate, isPending } = useUpdateUserBefore();
+
+  const onSubmit: SubmitHandler<UserFormValues> = (data) => {
+    const formData = {
+      ...data,
+      id: userId,
+    };
+    mutate(
+      { id: userId, data: formData },
+      {
+        onSuccess: () => {
+          console.log("Settings saved successfully.");
+          router.push("/before");
+        },
+        onError: () => {
+          console.log("Something went wrong. Please try again.");
+        },
+      }
+    );
+  };
+
+  if (!user) {
+    return <div>No user found</div>;
+  }
+
+  const defaultValues: UserFormValues = {
+    name: user.name,
+    role: user.role,
+  };
+
+  return (
+    <div className="w-full flex justify-center">
+      <UserForm
+        defaultValues={defaultValues}
+        onSubmit={onSubmit}
+        isPending={isPending}
+      />
+    </div>
+  );
+}
+
+export default function UpdateUser() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  if (!id || typeof id !== "string") {
+    return <div>Loading...</div>;
+  }
+
+  const userId = parseInt(id);
+
+  return (
+    <Suspense clientOnly fallback={<div>Loading...</div>}>
+      <UpdateUserPage userId={userId} />
+    </Suspense>
+  );
+}
