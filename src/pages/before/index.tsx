@@ -13,11 +13,11 @@ import {
   Chip,
   Box,
   Button,
-  CircularProgress,
   Alert,
 } from "@mui/material";
 import { ArrowBack, Person } from "@mui/icons-material";
 import { useSuspenseGetUserList } from "@/queries/user";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 const roleColors = {
   admin: "error" as const,
@@ -105,21 +105,6 @@ function UserList() {
   );
 }
 
-function LoadingState() {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: 300,
-      }}
-    >
-      <CircularProgress size={60} />
-    </Box>
-  );
-}
-
 export default function UserListPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -139,7 +124,7 @@ export default function UserListPage() {
           gutterBottom
           sx={{ fontWeight: 700 }}
         >
-          사용자 목록 (Before)
+          유저 목록 (Before)
         </Typography>
         <Alert severity="info" sx={{ mt: 2 }}>
           <Typography variant="body2">
@@ -150,7 +135,7 @@ export default function UserListPage() {
         </Alert>
       </Box>
 
-      <Suspense fallback={<LoadingState />}>
+      <Suspense fallback={<LoadingSpinner />}>
         <UserList />
       </Suspense>
     </Container>

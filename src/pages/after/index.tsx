@@ -13,11 +13,11 @@ import {
   Chip,
   Box,
   Button,
-  CircularProgress,
   Alert,
 } from "@mui/material";
 import { ArrowBack, Person } from "@mui/icons-material";
 import { useSuspenseGetUserList } from "@/queries/user";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 const roleColors = {
   admin: "error" as const,
@@ -105,21 +105,6 @@ function UserList() {
   );
 }
 
-function LoadingState() {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: 300,
-      }}
-    >
-      <CircularProgress size={60} />
-    </Box>
-  );
-}
-
 export default function UserListPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -151,9 +136,76 @@ export default function UserListPage() {
         </Alert>
       </Box>
 
-      <Suspense fallback={<LoadingState />}>
+      <Suspense fallback={<LoadingSpinner />}>
         <UserList />
       </Suspense>
     </Container>
   );
 }
+
+// "use client";
+
+// import Link from "next/link";
+// import { Suspense } from "react";
+// import {
+//   Container,
+//   Typography,
+//   Grid,
+//   Card,
+//   CardContent,
+//   CardActionArea,
+//   Avatar,
+//   Chip,
+//   Box,
+//   Button,
+//   CircularProgress,
+//   Alert,
+// } from "@mui/material";
+// import { ArrowBack, Person } from "@mui/icons-material";
+// import { useSuspenseGetUserList } from "@/queries/user";
+
+// const roleColors = {
+//   admin: "error" as const,
+//   editor: "warning" as const,
+//   viewer: "info" as const,
+// };
+
+// const roleLabels = {
+//   admin: "관리자",
+//   editor: "편집자",
+//   viewer: "뷰어",
+// };
+
+// function UserList() {
+//   const [userList] = useSuspenseGetUserList();
+
+//   if (!userList || userList.length === 0) {
+//     return (
+//       <Alert severity="info" sx={{ mt: 2 }}>
+//         사용자가 없습니다.
+//       </Alert>
+//     );
+//   }
+
+//   return (
+//     <Grid container spacing={3}>
+//       {userList.map((user) => (
+//         <Card key={user.id}>User Card</Card>
+//       ))}
+//     </Grid>
+//   );
+// }
+
+// export default function UserListPage() {
+//   const [userList] = useSuspenseGetUserList();
+
+//   return (
+//     <Suspense fallback={<LoadingState />}>
+//       <Grid>
+//         {userList.map((user) => (
+//           <Card key={user.id}>User Card</Card>
+//         ))}
+//       </Grid>
+//     </Suspense>
+//   );
+// }

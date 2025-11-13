@@ -12,11 +12,11 @@ import {
   Chip,
   Alert,
 } from "@mui/material";
-import { PlayArrow, CheckCircle, Cancel, Code } from "@mui/icons-material";
+import { CheckCircle, Cancel, Code } from "@mui/icons-material";
 
 export default function HomePage() {
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
+    <Container maxWidth="md">
       <Box sx={{ textAlign: "center", mb: 6 }}>
         <Box
           sx={{
@@ -152,16 +152,6 @@ export default function HomePage() {
           </Card>
         </Grid>
       </Grid>
-
-      <Box sx={{ mt: 6, textAlign: "center" }}>
-        <PlayArrow sx={{ fontSize: 40, color: "primary.main", mb: 2 }} />
-        <Typography variant="h6" gutterBottom>
-          시작하기
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          카드를 클릭하여 각 버전의 사용자 목록을 확인하고 동작을 비교해보세요.
-        </Typography>
-      </Box>
     </Container>
   );
 }

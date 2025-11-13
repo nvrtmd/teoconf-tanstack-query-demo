@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { Suspense } from "@suspensive/react";
 import { useSuspenseGetUser, useUpdateUserBefore } from "@/queries/user";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 import type { SubmitHandler } from "react-hook-form";
 import { userFormSchema } from "@/server/fixtures";
@@ -40,9 +41,9 @@ function UserForm({ defaultValues, onSubmit, isPending }: UserFormProps) {
     resolver: zodResolver(userFormSchema),
   });
   return (
-    <Box sx={{ maxWidth: 500, mx: "auto", p: 2 }}>
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h5" gutterBottom>
+    <Box sx={{ width: "500px", mx: "auto", p: 2 }}>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Typography variant="h4" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
           유저 정보 수정 (Before)
         </Typography>
 
@@ -53,10 +54,11 @@ function UserForm({ defaultValues, onSubmit, isPending }: UserFormProps) {
             label="이름"
             error={!!errors.name}
             helperText={errors.name?.message}
-            sx={{ mb: 2 }}
+            sx={{ mb: 3 }}
+            size="medium"
           />
 
-          <FormControl fullWidth error={!!errors.role} sx={{ mb: 3 }}>
+          <FormControl fullWidth error={!!errors.role} sx={{ mb: 4 }}>
             <InputLabel>역할</InputLabel>
             <Select
               value={watch("role") || ""}
@@ -68,6 +70,7 @@ function UserForm({ defaultValues, onSubmit, isPending }: UserFormProps) {
                 )
               }
               label="역할"
+              size="medium"
             >
               <MenuItem value="admin">관리자</MenuItem>
               <MenuItem value="editor">편집자</MenuItem>
@@ -85,7 +88,8 @@ function UserForm({ defaultValues, onSubmit, isPending }: UserFormProps) {
               type="submit"
               variant="contained"
               disabled={isPending}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1, py: 1.5, fontSize: "1rem" }}
+              size="large"
             >
               {isPending ? "수정 중..." : "수정"}
             </Button>
@@ -130,13 +134,20 @@ function UpdateUserPage({ userId }: { userId: number }) {
   };
 
   return (
-    <div className="w-full flex justify-center">
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+      }}
+    >
       <UserForm
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         isPending={isPending}
       />
-    </div>
+    </Box>
   );
 }
 
@@ -145,13 +156,13 @@ export default function UpdateUser() {
   const { id } = router.query;
 
   if (!id || typeof id !== "string") {
-    return <div>Loading...</div>;
+    return <LoadingSpinner fullScreen />;
   }
 
   const userId = parseInt(id);
 
   return (
-    <Suspense clientOnly fallback={<div>Loading...</div>}>
+    <Suspense clientOnly fallback={<LoadingSpinner fullScreen />}>
       <UpdateUserPage userId={userId} />
     </Suspense>
   );
