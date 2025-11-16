@@ -115,7 +115,7 @@ function UpdateUserPage({ userId }: { userId: number }) {
       {
         onSuccess: () => {
           console.log("Settings saved successfully.");
-          router.push("/user/after");
+          router.push("/after");
         },
         onError: () => {
           console.log("Something went wrong. Please try again.");
