@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Suspense } from "react";
 import {
@@ -10,26 +8,13 @@ import {
   CardContent,
   CardActionArea,
   Avatar,
-  Chip,
   Box,
   Button,
   Alert,
 } from "@mui/material";
-import { ArrowBack, Person } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import { useSuspenseGetUserList } from "@/queries/user";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-
-const roleColors = {
-  admin: "error" as const,
-  editor: "warning" as const,
-  viewer: "info" as const,
-};
-
-const roleLabels = {
-  admin: "관리자",
-  editor: "편집자",
-  viewer: "뷰어",
-};
 
 function UserList() {
   const [userList] = useSuspenseGetUserList();
@@ -89,12 +74,6 @@ function UserList() {
                   >
                     {user.name}
                   </Typography>
-                  <Chip
-                    label={roleLabels[user.role]}
-                    color={roleColors[user.role]}
-                    size="small"
-                    icon={<Person />}
-                  />
                 </Box>
               </CardContent>
             </CardActionArea>
@@ -126,11 +105,11 @@ export default function UserListPage() {
         >
           유저 목록 (Before)
         </Typography>
-        <Alert severity="info" sx={{ mt: 2 }}>
+        <Alert severity="error" sx={{ mt: 2 }}>
           <Typography variant="body2">
-            <strong>Before 버전:</strong> 사용자 정보를 수정한 후 목록 페이지로
-            돌아와도 변경사항이 자동으로 반영되지 않습니다. 페이지를
-            새로고침해야 변경된 내용을 볼 수 있습니다.
+            <strong>문제 상황:</strong> 유저 정보(닉네임, 역할)를 수정한 후 다시
+            해당 유저 페이지를 방문하면 수정 전 데이터가 잠깐 보이다가 수정 후
+            데이터로 변경됩니다.
           </Typography>
         </Alert>
       </Box>

@@ -23,12 +23,18 @@ import { userFormSchema } from "@/server/fixtures";
 type UserFormValues = z.infer<typeof userFormSchema>;
 
 interface UserFormProps {
+  userName: string;
   defaultValues?: UserFormValues;
   onSubmit: SubmitHandler<UserFormValues>;
   isPending: boolean;
 }
 
-function UserForm({ defaultValues, onSubmit, isPending }: UserFormProps) {
+function UserForm({
+  userName,
+  defaultValues,
+  onSubmit,
+  isPending,
+}: UserFormProps) {
   const {
     register,
     handleSubmit,
@@ -49,11 +55,20 @@ function UserForm({ defaultValues, onSubmit, isPending }: UserFormProps) {
 
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
           <TextField
-            {...register("name")}
             fullWidth
             label="이름"
-            error={!!errors.name}
-            helperText={errors.name?.message}
+            value={userName}
+            disabled
+            sx={{ mb: 3 }}
+            size="medium"
+          />
+
+          <TextField
+            {...register("nickname")}
+            fullWidth
+            label="닉네임"
+            error={!!errors.nickname}
+            helperText={errors.nickname?.message}
             sx={{ mb: 3 }}
             size="medium"
           />
@@ -129,7 +144,7 @@ function UpdateUserPage({ userId }: { userId: number }) {
   }
 
   const defaultValues: UserFormValues = {
-    name: user.name,
+    nickname: user.nickname,
     role: user.role,
   };
 
@@ -143,6 +158,7 @@ function UpdateUserPage({ userId }: { userId: number }) {
       }}
     >
       <UserForm
+        userName={user.name}
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         isPending={isPending}

@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Suspense } from "react";
 import {
@@ -10,26 +8,13 @@ import {
   CardContent,
   CardActionArea,
   Avatar,
-  Chip,
   Box,
   Button,
   Alert,
 } from "@mui/material";
-import { ArrowBack, Person } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import { useSuspenseGetUserList } from "@/queries/user";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-
-const roleColors = {
-  admin: "error" as const,
-  editor: "warning" as const,
-  viewer: "info" as const,
-};
-
-const roleLabels = {
-  admin: "관리자",
-  editor: "편집자",
-  viewer: "뷰어",
-};
 
 function UserList() {
   const [userList] = useSuspenseGetUserList();
@@ -89,12 +74,6 @@ function UserList() {
                   >
                     {user.name}
                   </Typography>
-                  <Chip
-                    label={roleLabels[user.role]}
-                    color={roleColors[user.role]}
-                    size="small"
-                    icon={<Person />}
-                  />
                 </Box>
               </CardContent>
             </CardActionArea>
@@ -125,13 +104,13 @@ export default function UserListPage() {
           gutterBottom
           sx={{ fontWeight: 700 }}
         >
-          사용자 목록 (After)
+          유저 목록 (After)
         </Typography>
         <Alert severity="success" sx={{ mt: 2 }}>
           <Typography variant="body2">
-            <strong>After 버전:</strong> 사용자 정보를 수정한 후 목록 페이지로
-            돌아오면 변경사항이 자동으로 반영됩니다! 캐시 무효화와 자동 리페치를
-            통해 항상 최신 데이터를 표시합니다.
+            <strong>해결 완료:</strong> await로 invalidateQueries 완료를
+            보장하여 유저 정보 수정 후 다시 페이지를 방문하면 최신 데이터(수정된
+            닉네임, 역할)가 즉시 표시됩니다.
           </Typography>
         </Alert>
       </Box>
@@ -142,70 +121,3 @@ export default function UserListPage() {
     </Container>
   );
 }
-
-// "use client";
-
-// import Link from "next/link";
-// import { Suspense } from "react";
-// import {
-//   Container,
-//   Typography,
-//   Grid,
-//   Card,
-//   CardContent,
-//   CardActionArea,
-//   Avatar,
-//   Chip,
-//   Box,
-//   Button,
-//   CircularProgress,
-//   Alert,
-// } from "@mui/material";
-// import { ArrowBack, Person } from "@mui/icons-material";
-// import { useSuspenseGetUserList } from "@/queries/user";
-
-// const roleColors = {
-//   admin: "error" as const,
-//   editor: "warning" as const,
-//   viewer: "info" as const,
-// };
-
-// const roleLabels = {
-//   admin: "관리자",
-//   editor: "편집자",
-//   viewer: "뷰어",
-// };
-
-// function UserList() {
-//   const [userList] = useSuspenseGetUserList();
-
-//   if (!userList || userList.length === 0) {
-//     return (
-//       <Alert severity="info" sx={{ mt: 2 }}>
-//         사용자가 없습니다.
-//       </Alert>
-//     );
-//   }
-
-//   return (
-//     <Grid container spacing={3}>
-//       {userList.map((user) => (
-//         <Card key={user.id}>User Card</Card>
-//       ))}
-//     </Grid>
-//   );
-// }
-
-// export default function UserListPage() {
-//   const [userList] = useSuspenseGetUserList();
-
-//   return (
-//     <Suspense fallback={<LoadingState />}>
-//       <Grid>
-//         {userList.map((user) => (
-//           <Card key={user.id}>User Card</Card>
-//         ))}
-//       </Grid>
-//     </Suspense>
-//   );
-// }

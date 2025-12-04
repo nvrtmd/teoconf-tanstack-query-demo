@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import {
   Container,
@@ -12,43 +10,29 @@ import {
   Chip,
   Alert,
 } from "@mui/material";
-import { CheckCircle, Cancel, Code } from "@mui/icons-material";
+import { CheckCircle, Cancel } from "@mui/icons-material";
 
 export default function HomePage() {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ pt: 10, height: "100vh" }}>
       <Box sx={{ textAlign: "center", mb: 6 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 2,
-            mb: 2,
-          }}
-        >
-          <Code sx={{ fontSize: 48, color: "primary.main" }} />
-        </Box>
         <Typography
           variant="h2"
           component="h1"
           gutterBottom
           sx={{ fontWeight: 800, mb: 2 }}
         >
-          TanStack Query Demo
+          TanStack Query 데모
         </Typography>
         <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
-          캐시 무효화 전략 비교 데모
+          캐시 갱신 문제와 해결 과정
         </Typography>
         <Alert severity="info" sx={{ textAlign: "left" }}>
           <Typography variant="body2">
-            이 데모는 TanStack Query (React Query)의 캐시 무효화 전략을
-            비교합니다. 각 버전에서 사용자 정보를 수정하고 목록 페이지로 돌아가
-            차이를 확인해보세요.
+            TanStack Query의 캐시 갱신 문제를 해결하는 과정을 체험해보세요.
           </Typography>
         </Alert>
       </Box>
-
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Card
@@ -79,7 +63,7 @@ export default function HomePage() {
                   </Typography>
                 </Box>
                 <Chip
-                  label="동기 무효화"
+                  label="문제 상황"
                   color="error"
                   size="small"
                   sx={{ mb: 2 }}
@@ -89,11 +73,13 @@ export default function HomePage() {
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Mutation 후 캐시를 무효화하지만, 자동 리페치가 되지 않습니다.
+                  invalidateQueries가 비동기적으로 실행되어 캐시 갱신이 완료되기
+                  전에 페이지가 이동합니다.
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  ❌ 변경사항이 즉시 반영되지 않음
-                  <br />❌ 페이지 새로고침 필요
+                  ❌ tRPC의 abortOnUnmount 옵션으로 인해 캐시 갱신 중 요청이
+                  취소됨
+                  <br />❌ 수정 전 데이터가 잠깐 노출됨
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -131,7 +117,7 @@ export default function HomePage() {
                   </Typography>
                 </Box>
                 <Chip
-                  label="비동기 무효화 + refetchType: all"
+                  label="해결 후"
                   color="success"
                   size="small"
                   sx={{ mb: 2 }}
@@ -141,11 +127,12 @@ export default function HomePage() {
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Mutation 후 캐시를 무효화하고 모든 쿼리를 즉시 재실행합니다.
+                  await로 invalidateQueries 완료를 보장하여 캐시 갱신 후
+                  페이지를 이동합니다.
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  ✅ 변경사항 즉시 반영
-                  <br />✅ 자동 리페치로 최신 상태 유지
+                  ✅ 페이지 이동 전에 캐시 갱신이 완료됨
+                  <br /> ✅ 최신 데이터가 즉시 표시됨
                 </Typography>
               </CardContent>
             </CardActionArea>
