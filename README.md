@@ -2,7 +2,7 @@
 
 > 이 프로젝트는 TanStack Query의 캐시 갱신 문제를 해결하는 과정을 실제로 체험할 수 있도록 제작된 데모 애플리케이션입니다.
 
-**🌐 데모 사이트**: [Link](https://teoconf-tanstack-query-demo-wt6e-pkc1wm5l6-nvrtmds-projects.vercel.app/)
+**🌐 데모 사이트**: [Link](https://teoconf-demo.vercel.app/)
 
 ## 📚 프로젝트 개요
 
