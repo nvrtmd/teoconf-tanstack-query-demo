@@ -10,7 +10,7 @@ import {
   Chip,
   Alert,
 } from "@mui/material";
-import { CheckCircle, Cancel } from "@mui/icons-material";
+import { CheckCircle, Cancel, GitHub } from "@mui/icons-material";
 
 export default function HomePage() {
   return (
@@ -24,9 +24,23 @@ export default function HomePage() {
         >
           TanStack Query 데모
         </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
+        <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
           캐시 갱신 문제와 해결 과정
         </Typography>
+        <Link
+          href="https://github.com/nvrtmd/teoconf-tanstack-query-demo"
+          target="_blank"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 1,
+            marginBottom: 10,
+          }}
+        >
+          <GitHub />
+          GitHub Repository Link
+        </Link>
         <Alert severity="info" sx={{ textAlign: "left" }}>
           <Typography variant="body2">
             TanStack Query의 캐시 갱신 문제를 해결하는 과정을 체험해보세요.
